@@ -1,0 +1,4 @@
+*.pt
+data/train/**
+data/test/**
+*.gz
