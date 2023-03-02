@@ -1,16 +1,11 @@
-
-
-
 import torch.nn as nn
 import torch.nn.functional as F
 
-# class Conv_block(nn.Module):
-
 class LSTM(nn.Module):
-    def __init__(self, num_classes=10):
+    def __init__(self, input_dim, seq, hidden_dim, num_classes=10):
         super(LSTM, self).__init__()
-        self.lstm = nn.LSTM(28*28,4*28,2, batch_first=True, dropout=0.3)
-        self.fc = nn.Linear(4*28,10)
+        self.lstm = nn.LSTM(input_dim,hidden_dim,batch_first=True, dropout=0.3)
+        self.fc = nn.Linear(hidden_dim,num_classes)
 
     def _init_weights(self, module):
             if isinstance(module, nn.Embedding):
@@ -23,11 +18,9 @@ class LSTM(nn.Module):
 
 
     def forward(self, x):
-        x = x.view(-1,28*28)
-        # print(x)
-        
-        x,(final_state, hidden_state) = self.lstm(x)
-        x = self.fc(x)
+        x = x.view(-1,28,28)        
+        out,(final_state, hidden_state) = self.lstm(x)
+        x = self.fc(final_state[0,:,:])
 
         return x
 

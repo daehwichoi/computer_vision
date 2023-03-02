@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.optim as optim
 import torchvision.transforms as transforms
 import torchvision
-from model.lstm import LSTM
+from model.lstm_custom import LSTM
 
 
 from torchsummary import summary
@@ -14,6 +14,7 @@ n_epoch = 50
 log_interval = 100
 batch_num = 128
 learning_rate = 0.001
+
 
 def train(model, epoch, train_loader, optimizer, device='cuda'):
     model.train()
@@ -67,7 +68,6 @@ def main():
     device = 'cuda' if gpu_flag else 'cpu'
     train_flag = True
 
-    # Augmentation : Random Crop, RandomHorizontal Flip
     train_transform = transforms.Compose([transforms.RandomCrop(28, padding=4),
                                     transforms.RandomHorizontalFlip(),
                                     transforms.ToTensor()])
@@ -79,9 +79,8 @@ def main():
     train_loader = torch.utils.data.DataLoader(trainset,batch_size=batch_num, shuffle=True)
     test_loader = torch.utils.data.DataLoader(testset, batch_size=1000, shuffle=False)
 
+    # torchvision model load 
     model = LSTM(input_dim=28,seq=28,hidden_dim=14).to(device=device)
-
-
 
     # Optimizer Select 
     # optimizer = optim.SGD(model.parameters(), lr=learning_rate, momentum=0.9)
