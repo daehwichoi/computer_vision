@@ -2,3 +2,4 @@
 data/train/**
 data/test/**
 *.gz
+.idea
